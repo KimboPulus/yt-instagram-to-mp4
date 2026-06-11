@@ -3,6 +3,8 @@ import path from "node:path";
 import { DEFAULT_LIMITS } from "@clipforge/shared";
 import { z } from "zod";
 
+const projectRoot = path.resolve(import.meta.dirname, "..", "..", "..");
+
 const envSchema = z.object({
   CLEANUP_AGE_HOURS: z.coerce
     .number()
@@ -48,9 +50,7 @@ export function loadConfig(
 
   return {
     cleanupAgeHours: parsed.CLEANUP_AGE_HOURS,
-    dataDir: path.resolve(
-      parsed.DATA_DIR ?? path.join(process.cwd(), "..", "..", "data"),
-    ),
+    dataDir: path.resolve(projectRoot, parsed.DATA_DIR ?? "data"),
     downloaderPath: parsed.DOWNLOADER_PATH,
     ffmpegPath: parsed.FFMPEG_PATH,
     ffprobePath: parsed.FFPROBE_PATH,

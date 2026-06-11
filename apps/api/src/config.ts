@@ -3,6 +3,8 @@ import path from "node:path";
 import { DEFAULT_LIMITS } from "@clipforge/shared";
 import { z } from "zod";
 
+const projectRoot = path.resolve(import.meta.dirname, "..", "..", "..");
+
 const envSchema = z.object({
   API_HOST: z.string().default("127.0.0.1"),
   API_PORT: z.coerce.number().int().min(1).max(65535).default(4100),
@@ -39,9 +41,7 @@ export function loadConfig(
 
   return {
     cleanupAgeHours: parsed.CLEANUP_AGE_HOURS,
-    dataDir: path.resolve(
-      parsed.DATA_DIR ?? path.join(process.cwd(), "..", "..", "data"),
-    ),
+    dataDir: path.resolve(projectRoot, parsed.DATA_DIR ?? "data"),
     host: parsed.API_HOST,
     maxDurationSeconds: parsed.MAX_DURATION_SECONDS,
     maxFileSizeBytes: parsed.MAX_FILE_SIZE_BYTES,
