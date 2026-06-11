@@ -2,11 +2,7 @@ import { mkdtemp, writeFile, mkdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import type {
-  JobPhase,
-  VideoJobData,
-  VideoJobResult,
-} from "@clipforge/shared";
+import type { JobPhase, VideoJobData, VideoJobResult } from "@clipforge/shared";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { buildApp } from "./app.js";

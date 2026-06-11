@@ -33,10 +33,7 @@ export async function deleteJob(id: string): Promise<void> {
   });
 }
 
-async function request<T>(
-  pathname: string,
-  options?: RequestInit,
-): Promise<T> {
+async function request<T>(pathname: string, options?: RequestInit): Promise<T> {
   let response: Response;
 
   try {

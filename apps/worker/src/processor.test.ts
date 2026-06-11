@@ -2,11 +2,7 @@ import { mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import type {
-  JobPhase,
-  MediaMetadata,
-  VideoJobData,
-} from "@clipforge/shared";
+import type { JobPhase, MediaMetadata, VideoJobData } from "@clipforge/shared";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import type { WorkerConfig } from "./config.js";

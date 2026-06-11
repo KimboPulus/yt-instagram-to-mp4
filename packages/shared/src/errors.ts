@@ -24,8 +24,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   ACKNOWLEDGEMENT_REQUIRED:
     "You must confirm that this is your own video or that you have permission.",
   DOWNLOAD_NOT_READY: "The converted file is not ready yet.",
-  DURATION_LIMIT_EXCEEDED:
-    "This video exceeds the configured duration limit.",
+  DURATION_LIMIT_EXCEEDED: "This video exceeds the configured duration limit.",
   FILE_LIMIT_EXCEEDED: "This file exceeds the configured local limit.",
   IMPORT_FAILED:
     "The media could not be imported. It may be unavailable, private, restricted, removed, or unsupported.",

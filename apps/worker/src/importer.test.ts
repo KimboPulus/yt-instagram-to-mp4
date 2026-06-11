@@ -13,8 +13,6 @@ describe("buildImporterArgs", () => {
     expect(args).toContain("--no-playlist");
     expect(args).toContain("--max-filesize");
     expect(args).not.toContain("--cookies");
-    expect(args.at(-1)).toBe(
-      "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    );
+    expect(args.at(-1)).toBe("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
   });
 });

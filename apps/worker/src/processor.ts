@@ -23,10 +23,7 @@ export interface WorkerJob {
   data: VideoJobData;
   discard(): void;
   id?: string;
-  updateProgress(progress: {
-    phase: JobPhase;
-    percent: number;
-  }): Promise<void>;
+  updateProgress(progress: { phase: JobPhase; percent: number }): Promise<void>;
 }
 
 export interface ProcessorDependencies {
@@ -47,8 +44,7 @@ export function createVideoProcessor(dependencies: ProcessorDependencies) {
       job.id,
     );
     const logger =
-      dependencies.loggerFactory?.(folders) ??
-      new FileJobLogger(folders.logs);
+      dependencies.loggerFactory?.(folders) ?? new FileJobLogger(folders.logs);
 
     try {
       await setPhase(job, logger, "validating", 5);

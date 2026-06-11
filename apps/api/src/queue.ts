@@ -131,7 +131,9 @@ export class BullVideoQueue implements VideoQueue {
   }
 }
 
-function parseFailure(rawFailure: string | undefined): WorkerFailure | undefined {
+function parseFailure(
+  rawFailure: string | undefined,
+): WorkerFailure | undefined {
   if (!rawFailure) {
     return undefined;
   }

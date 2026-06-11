@@ -25,10 +25,7 @@ export class YtDlpImporter implements MediaImporter {
     downloadDirectory: string,
     logger: JobLogger,
   ): Promise<string> {
-    const outputTemplate = path.join(
-      downloadDirectory,
-      "%(id)s.%(ext)s",
-    );
+    const outputTemplate = path.join(downloadDirectory, "%(id)s.%(ext)s");
     const args = buildImporterArgs(
       canonicalUrl,
       outputTemplate,
@@ -51,11 +48,7 @@ export class YtDlpImporter implements MediaImporter {
       await logger.write(
         `Import failed: ${error instanceof Error ? error.message : String(error)}`,
       );
-      throw new AppError(
-        "IMPORT_FAILED",
-        ERROR_MESSAGES.IMPORT_FAILED,
-        true,
-      );
+      throw new AppError("IMPORT_FAILED", ERROR_MESSAGES.IMPORT_FAILED, true);
     }
 
     const importedPath = printedPaths.at(-1);

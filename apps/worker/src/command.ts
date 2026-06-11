@@ -57,10 +57,9 @@ export class SpawnCommandRunner implements CommandRunner {
 
       child.on("error", (error) => {
         reject(
-          new Error(
-            `Could not start ${executable}: ${error.message}`,
-            { cause: error },
-          ),
+          new Error(`Could not start ${executable}: ${error.message}`, {
+            cause: error,
+          }),
         );
       });
 

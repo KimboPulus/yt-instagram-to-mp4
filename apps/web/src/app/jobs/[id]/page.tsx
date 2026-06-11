@@ -163,9 +163,7 @@ export default function JobPage() {
                     : "Working on your video."}
               </h1>
             </div>
-            <div
-              className={`result-stamp ${failed ? "result-failed" : ""}`}
-            >
+            <div className={`result-stamp ${failed ? "result-failed" : ""}`}>
               <span>{completed ? "DONE" : failed ? "STOPPED" : "LOCAL"}</span>
               <strong>{job.progress}%</strong>
             </div>
@@ -211,16 +209,14 @@ export default function JobPage() {
                   <p className="step-label">OUTPUT FILE</p>
                   <h2>{metadata.title ?? "Converted video"}</h2>
                   <p>
-                    H.264 MP4 with fast-start metadata, ready for normal
-                    browser playback.
+                    H.264 MP4 with fast-start metadata, ready for normal browser
+                    playback.
                   </p>
                   <div className="output-actions">
                     <a
                       className={`primary-button ${demo ? "button-disabled" : ""}`}
                       href={
-                        demo
-                          ? undefined
-                          : `${API_URL}/jobs/${job.id}/download`
+                        demo ? undefined : `${API_URL}/jobs/${job.id}/download`
                       }
                     >
                       Download MP4
@@ -238,7 +234,10 @@ export default function JobPage() {
               </div>
 
               <div className="metadata-grid">
-                <Metadata label="Duration" value={formatDuration(metadata.durationSeconds)} />
+                <Metadata
+                  label="Duration"
+                  value={formatDuration(metadata.durationSeconds)}
+                />
                 <Metadata
                   label="Frame"
                   value={`${metadata.width} x ${metadata.height}`}

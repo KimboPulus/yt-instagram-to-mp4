@@ -148,16 +148,12 @@ export function parseProbeOutput(
   fileSizeBytes: number,
 ): MediaMetadata {
   const parsed = JSON.parse(rawJson) as ProbeOutput;
-  const video = parsed.streams?.find(
-    (stream) => stream.codec_type === "video",
-  );
+  const video = parsed.streams?.find((stream) => stream.codec_type === "video");
   if (!video?.codec_name || !video.width || !video.height) {
     throw new AppError("NO_VIDEO_STREAM", ERROR_MESSAGES.NO_VIDEO_STREAM);
   }
 
-  const audio = parsed.streams?.find(
-    (stream) => stream.codec_type === "audio",
-  );
+  const audio = parsed.streams?.find((stream) => stream.codec_type === "audio");
   const durationSeconds = Number.parseFloat(parsed.format?.duration ?? "0");
 
   return {

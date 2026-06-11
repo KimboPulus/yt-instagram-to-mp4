@@ -91,9 +91,7 @@ export default function HomePage() {
 
           <fieldset className="format-picker">
             <legend>Output shape</legend>
-            <label
-              className={outputMode === "original" ? "format-active" : ""}
-            >
+            <label className={outputMode === "original" ? "format-active" : ""}>
               <input
                 checked={outputMode === "original"}
                 name="outputMode"
@@ -106,9 +104,7 @@ export default function HomePage() {
                 <small>Preserve the source aspect ratio</small>
               </span>
             </label>
-            <label
-              className={outputMode === "vertical" ? "format-active" : ""}
-            >
+            <label className={outputMode === "vertical" ? "format-active" : ""}>
               <input
                 checked={outputMode === "vertical"}
                 name="outputMode"
@@ -141,8 +137,14 @@ export default function HomePage() {
 
           {error ? <p className="form-error">{error}</p> : null}
 
-          <button className="primary-button" disabled={submitting} type="submit">
-            <span>{submitting ? "Adding to queue..." : "Create local job"}</span>
+          <button
+            className="primary-button"
+            disabled={submitting}
+            type="submit"
+          >
+            <span>
+              {submitting ? "Adding to queue..." : "Create local job"}
+            </span>
             <span aria-hidden="true">-&gt;</span>
           </button>
         </form>
