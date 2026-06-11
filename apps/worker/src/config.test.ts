@@ -11,4 +11,12 @@ describe("worker config", () => {
 
     expect(config.dataDir).toBe(path.join(projectRoot, "custom-data"));
   });
+
+  it("preserves an absolute data directory", () => {
+    const absoluteDataDir = path.resolve("D:/clipforge-test-data");
+
+    expect(loadConfig({ DATA_DIR: absoluteDataDir }).dataDir).toBe(
+      absoluteDataDir,
+    );
+  });
 });

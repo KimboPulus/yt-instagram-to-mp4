@@ -21,6 +21,11 @@ describe("normalizeVideoUrl", () => {
       "https://www.youtube.com/shorts/dQw4w9WgXcQ",
     ],
     [
+      "https://www.youtube.com/shorts/0LG1SJl_FmI",
+      "youtube-shorts",
+      "https://www.youtube.com/shorts/0LG1SJl_FmI",
+    ],
+    [
       "https://www.instagram.com/reel/C8example_1/?igsh=abc",
       "instagram-reel",
       "https://www.instagram.com/reel/C8example_1/",

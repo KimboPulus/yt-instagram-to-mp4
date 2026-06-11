@@ -1,4 +1,4 @@
-import { mkdtemp, writeFile, mkdir } from "node:fs/promises";
+import { access, mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -120,6 +120,39 @@ describe("API routes", () => {
     expect(response.json().code).toBe("INVALID_JOB_ID");
   });
 
+  it("returns a clear response for an unknown job", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: "/jobs/0f715539-1daf-4f7a-8b03-0d44e9da1189",
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toMatchObject({
+      code: "JOB_NOT_FOUND",
+      message: "The requested job does not exist.",
+    });
+  });
+
+  it("blocks downloads until processing has completed", async () => {
+    const createResponse = await app.inject({
+      method: "POST",
+      url: "/jobs",
+      payload: {
+        acknowledged: true,
+        url: "https://youtube.com/shorts/0LG1SJl_FmI",
+      },
+    });
+    const { id } = createResponse.json();
+
+    const response = await app.inject({
+      method: "GET",
+      url: `/jobs/${id}/download`,
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.json().code).toBe("DOWNLOAD_NOT_READY");
+  });
+
   it("serves only the known completed output file", async () => {
     const createResponse = await app.inject({
       method: "POST",
@@ -155,6 +188,23 @@ describe("API routes", () => {
     expect(response.body).toBe("fake-mp4");
   });
 
+  it("serves a generated JPEG thumbnail", async () => {
+    const id = "5c34c915-83c0-4fda-b384-c9fe691db50b";
+    const outputDirectory = path.join(config.dataDir, "outputs", id);
+    await mkdir(outputDirectory, { recursive: true });
+    await writeFile(path.join(outputDirectory, "thumbnail.jpg"), "fake-jpeg");
+
+    const response = await app.inject({
+      method: "GET",
+      url: `/jobs/${id}/thumbnail`,
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["content-type"]).toContain("image/jpeg");
+    expect(response.headers["cache-control"]).toBe("private, max-age=300");
+    expect(response.body).toBe("fake-jpeg");
+  });
+
   it("deletes queue state and local folders", async () => {
     const createResponse = await app.inject({
       method: "POST",
@@ -165,6 +215,15 @@ describe("API routes", () => {
       },
     });
     const { id } = createResponse.json();
+    const categories = ["downloads", "logs", "outputs", "temp"] as const;
+
+    await Promise.all(
+      categories.map(async (category) => {
+        const directory = path.join(config.dataDir, category, id);
+        await mkdir(directory, { recursive: true });
+        await writeFile(path.join(directory, "artifact.txt"), category);
+      }),
+    );
 
     const response = await app.inject({
       method: "DELETE",
@@ -173,5 +232,12 @@ describe("API routes", () => {
 
     expect(response.statusCode).toBe(204);
     expect(queue.jobs.has(id)).toBe(false);
+    await Promise.all(
+      categories.map((category) =>
+        expect(
+          access(path.join(config.dataDir, category, id)),
+        ).rejects.toMatchObject({ code: "ENOENT" }),
+      ),
+    );
   });
 });
