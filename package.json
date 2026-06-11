@@ -8,14 +8,14 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build -w @clipforge/shared && npm run build -w @clipforge/api && npm run build -w @clipforge/worker && npm run build -w @clipforge/web",
     "dev": "concurrently -n web,api,worker -c cyan,green,yellow \"npm run dev -w @clipforge/web\" \"npm run dev -w @clipforge/api\" \"npm run dev -w @clipforge/worker\"",
     "dev:web": "npm run dev -w @clipforge/web",
     "dev:api": "npm run dev -w @clipforge/api",
     "dev:worker": "npm run dev -w @clipforge/worker",
     "format:check": "prettier --check .",
     "test": "npm run test --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "typecheck": "npm run build -w @clipforge/shared && npm run typecheck --workspaces --if-present"
   },
   "engines": {
     "node": ">=20.9"
