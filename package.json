@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "npm run build -w @clipforge/shared && npm run build -w @clipforge/api && npm run build -w @clipforge/worker && npm run build -w @clipforge/web",
+    "check:tools": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-tools.ps1",
     "dev": "concurrently -n web,api,worker -c cyan,green,yellow \"npm run dev -w @clipforge/web\" \"npm run dev -w @clipforge/api\" \"npm run dev -w @clipforge/worker\"",
     "dev:web": "npm run dev -w @clipforge/web",
     "dev:api": "npm run dev -w @clipforge/api",
