@@ -1,0 +1,16 @@
+node_modules/
+.next/
+dist/
+coverage/
+.env
+.env.local
+*.log
+
+data/downloads/*
+data/logs/*
+data/outputs/*
+data/temp/*
+data/uploads/*
+!data/**/.gitkeep
+
+docs/screenshots/*.tmp.png

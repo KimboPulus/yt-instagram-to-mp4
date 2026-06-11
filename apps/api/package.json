@@ -1,0 +1,21 @@
+{
+  "name": "@clipforge/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@clipforge/shared": "*",
+    "@fastify/cors": "11.1.0",
+    "bullmq": "5.78.0",
+    "fastify": "5.8.5",
+    "ioredis": "5.11.1",
+    "zod": "4.4.3"
+  }
+}
