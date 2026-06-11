@@ -13,6 +13,7 @@
   "dependencies": {
     "@clipforge/shared": "*",
     "bullmq": "5.78.0",
+    "dotenv": "17.2.3",
     "zod": "4.4.3"
   }
 }

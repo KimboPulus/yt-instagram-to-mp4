@@ -1,3 +1,5 @@
+import "./env.js";
+
 import {
   VIDEO_QUEUE_NAME,
   type VideoJobData,
