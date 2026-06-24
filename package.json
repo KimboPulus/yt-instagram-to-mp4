@@ -1,6 +1,6 @@
 {
   "name": "yt-instagram-to-mp4",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "main": "apps/desktop/dist/main.js",
   "author": "KimboPulus",

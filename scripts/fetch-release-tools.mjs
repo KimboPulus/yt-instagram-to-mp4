@@ -66,7 +66,7 @@ async function prepareLinuxTools() {
   );
   await chmod(ytDlp, 0o755);
   await download(
-    "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz",
+    "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz",
     ffmpegArchive,
   );
   await mkdir(ffmpegExtracted, { recursive: true });
@@ -82,11 +82,32 @@ async function prepareLinuxTools() {
 
 async function download(url, destination) {
   console.log(`Downloading ${url}`);
-  const response = await fetch(url, { redirect: "follow" });
-  if (!response.ok || !response.body) {
-    throw new Error(`Download failed with HTTP ${response.status}: ${url}`);
+  let lastError;
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      await rm(destination, { force: true });
+      const response = await fetch(url, {
+        headers: { "User-Agent": "ClipForge-release-builder" },
+        redirect: "follow",
+      });
+      if (!response.ok || !response.body) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      await pipeline(response.body, createWriteStream(destination));
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) {
+        console.warn(`Download attempt ${attempt} failed; retrying...`);
+        await new Promise((resolve) => setTimeout(resolve, attempt * 2_000));
+      }
+    }
   }
-  await pipeline(response.body, createWriteStream(destination));
+
+  throw new Error(
+    `Download failed after 3 attempts: ${url}: ${lastError instanceof Error ? lastError.message : String(lastError)}`,
+  );
 }
 
 async function findDirectory(directory, name) {
