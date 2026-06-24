@@ -40,7 +40,7 @@ async function request<T>(pathname: string, options?: RequestInit): Promise<T> {
     response = await fetch(`${API_URL}${pathname}`, options);
   } catch {
     throw new Error(
-      "The local API is offline. Start Redis, the API and the worker first.",
+      "The local processing service is offline. Restart ClipForge and try again.",
     );
   }
 

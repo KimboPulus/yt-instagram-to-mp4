@@ -24,12 +24,16 @@ import {
 import type { VideoQueue } from "./queue.js";
 
 export interface AppDependencies {
+  allowedOrigins?: string[];
   config: ApiConfig;
+  healthDependency?: "localQueue" | "redis";
   queue: VideoQueue;
 }
 
 export async function buildApp({
+  allowedOrigins = ["http://127.0.0.1:3000", "http://localhost:3000"],
   config,
+  healthDependency = "redis",
   queue,
 }: AppDependencies): Promise<FastifyInstance> {
   const app = Fastify({
@@ -37,14 +41,14 @@ export async function buildApp({
   });
 
   await app.register(cors, {
-    origin: ["http://127.0.0.1:3000", "http://localhost:3000"],
+    origin: allowedOrigins,
   });
 
   app.get("/health", async (_request, reply) => {
-    const redis = await queue.ping().catch(() => false);
-    return reply.code(redis ? 200 : 503).send({
+    const dependencyAvailable = await queue.ping().catch(() => false);
+    return reply.code(dependencyAvailable ? 200 : 503).send({
       api: "ok",
-      redis: redis ? "ok" : "unavailable",
+      [healthDependency]: dependencyAvailable ? "ok" : "unavailable",
     });
   });
 

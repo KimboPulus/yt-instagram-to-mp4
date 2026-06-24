@@ -1,8 +1,7 @@
 # ClipForge Local
 
 A small local-first TypeScript app for importing a single permitted YouTube or
-Instagram video, putting it on a Redis queue and converting it to a
-browser-friendly MP4 with FFmpeg.
+Instagram video and converting it to a browser-friendly MP4 with FFmpeg.
 
 The project is intentionally private and local. It does not support playlists,
 profile downloads, private-content access, cookie uploads, proxies or account
@@ -14,11 +13,28 @@ automation.
 
 ## What is inside
 
+- `apps/desktop` - Electron launcher and in-process desktop job queue
 - `apps/web` - Next.js user interface
 - `apps/api` - Fastify HTTP API and guarded local file routes
 - `apps/worker` - BullMQ worker, yt-dlp adapter, FFprobe and FFmpeg pipeline
 - `packages/shared` - shared schemas, job types and URL normalization
 - `data` - job-specific downloads, outputs, temporary files and logs
+
+## Desktop release
+
+Desktop releases include Node.js, FFmpeg, FFprobe and yt-dlp. Docker and Redis
+are not required when using these packages.
+
+- Windows: run the portable `.exe`.
+- Ubuntu: install the `.deb`, or mark the `.AppImage` executable and run it.
+- openSUSE: install the `.rpm`, or use the same `.AppImage`.
+
+The packages are unsigned personal-project builds, so Windows or Linux may show
+a publisher warning. Download them only from this repository's Releases page.
+
+Packaged output is stored in the operating system's application-data directory.
+The desktop build uses an in-process queue with one conversion at a time. Redis
+and BullMQ remain part of the development/server architecture below.
 
 ## Requirements
 
@@ -54,9 +70,16 @@ encoding is CPU-heavy.
 npm test
 npm run typecheck
 npm run build
+npm run package:win
 npm run dev:web
 npm run dev:api
 npm run dev:worker
+```
+
+Linux release builds use:
+
+```bash
+npm run package:linux
 ```
 
 ## Job flow

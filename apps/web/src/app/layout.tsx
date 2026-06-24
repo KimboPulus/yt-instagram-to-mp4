@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main>{children}</main>
           <footer className="site-footer">
             <p>Built for personal, permission-based media workflows.</p>
-            <p>Next.js + Fastify + BullMQ + FFmpeg</p>
+            <p>Next.js + Fastify + local job queue + FFmpeg</p>
           </footer>
         </div>
       </body>

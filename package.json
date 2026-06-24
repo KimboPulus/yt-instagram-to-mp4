@@ -2,6 +2,8 @@
   "name": "yt-instagram-to-mp4",
   "version": "0.1.0",
   "private": true,
+  "main": "apps/desktop/dist/main.js",
+  "author": "KimboPulus",
   "description": "Local-first YouTube and Instagram video import and MP4 conversion tool.",
   "workspaces": [
     "apps/*",
@@ -9,25 +11,93 @@
   ],
   "scripts": {
     "build": "npm run build -w @clipforge/shared && npm run build -w @clipforge/api && npm run build -w @clipforge/worker && npm run build -w @clipforge/web",
+    "build:desktop": "npm run build && npm run build -w @clipforge/desktop",
     "check:tools": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-tools.ps1",
     "dev": "concurrently -n web,api,worker -c cyan,green,yellow \"npm run dev -w @clipforge/web\" \"npm run dev -w @clipforge/api\" \"npm run dev -w @clipforge/worker\"",
     "dev:web": "npm run dev -w @clipforge/web",
     "dev:api": "npm run dev -w @clipforge/api",
     "dev:worker": "npm run dev -w @clipforge/worker",
     "format:check": "prettier --check .",
+    "package:desktop": "npm run build:desktop && node scripts/fetch-release-tools.mjs && electron-builder",
+    "package:linux": "npm run build:desktop && node scripts/fetch-release-tools.mjs && electron-builder --linux AppImage deb rpm",
+    "package:win": "npm run build:desktop && node scripts/fetch-release-tools.mjs && electron-builder --win portable",
     "test": "npm run test --workspaces --if-present",
-    "typecheck": "npm run build -w @clipforge/shared && npm run typecheck --workspaces --if-present"
+    "typecheck": "npm run build -w @clipforge/shared && npm run build -w @clipforge/api && npm run build -w @clipforge/worker && npm run typecheck --workspaces --if-present"
   },
   "engines": {
     "node": ">=20.9"
   },
+  "dependencies": {
+    "@clipforge/shared": "*",
+    "@fastify/cors": "11.1.0",
+    "dotenv": "17.2.3",
+    "fastify": "5.8.5",
+    "next": "16.2.9",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "zod": "4.4.3"
+  },
   "devDependencies": {
     "@types/node": "24.10.1",
     "concurrently": "9.2.0",
+    "electron": "42.5.0",
+    "electron-builder": "26.15.3",
     "prettier": "3.6.2",
     "tsx": "4.22.4",
     "typescript": "6.0.3",
     "vitest": "4.1.8"
+  },
+  "build": {
+    "appId": "com.kimbopulus.clipforge",
+    "productName": "ClipForge Local",
+    "asar": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "package.json",
+      "apps/desktop/dist/**/*",
+      "apps/api/dist/**/*",
+      "apps/api/package.json",
+      "apps/worker/dist/**/*",
+      "apps/worker/package.json",
+      "apps/web/.next/**/*",
+      "apps/web/package.json",
+      "packages/shared/dist/**/*",
+      "packages/shared/package.json"
+    ],
+    "win": {
+      "artifactName": "ClipForge-Local-${version}-Windows-${arch}.${ext}",
+      "icon": "build/icon.png",
+      "extraResources": [
+        {
+          "from": "release-tools/win32",
+          "to": "tools"
+        }
+      ],
+      "target": [
+        "portable"
+      ]
+    },
+    "linux": {
+      "artifactName": "ClipForge-Local-${version}-Linux-${arch}.${ext}",
+      "category": "AudioVideo",
+      "executableName": "clipforge-local",
+      "icon": "build/icon.png",
+      "extraResources": [
+        {
+          "from": "release-tools/linux",
+          "to": "tools"
+        }
+      ],
+      "maintainer": "KimboPulus",
+      "synopsis": "Local permission-based video import and MP4 conversion tool",
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ]
+    }
   },
   "overrides": {
     "next": {
