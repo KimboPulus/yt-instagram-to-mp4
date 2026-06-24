@@ -32,6 +32,10 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Install Linux packaging tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install --yes rpm
+
       - run: npm ci
       - run: npm run build -w @clipforge/shared
       - run: npm test
